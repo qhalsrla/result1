@@ -1,2 +1,15 @@
-aaaa
-bbbb
+import pandas as pd
+import matplotlib.pyplot as plt
+df=pd.read_csv('대량분개장_1.csv')
+df['계약월']= df['전표일자'].astype(str).str[4:6]
+month_counts=df.groupby('계약월').size().reset_index(name='계약건수')
+plt.figure(figsize=(10,6))
+plt.plot(month_counts['계약월'], month_counts['계약건수'], marker='o')
+plt.title('월별 계약 건수 추이')
+plt.xlabel('계약월')
+plt.ylabel('계약건수')
+plt.xticks(rotation=45)
+plt.ylim(0, 1000000)
+plt.tight_layout()
+plt.show()
+
