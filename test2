@@ -1,0 +1,38 @@
+import numpy as np
+import mcerp
+from mcerp import *
+from scipy.stats import lognorm
+from geneticalgorithm import geneticalgorithm as ga
+import matplotlib.pyplot as plt
+np.random.seed(0)
+샘플수=10000
+매출액=10_000_000_000
+np.random.seed(0)
+mu_sigma = 0.3
+mu = np.log(1_000_000)
+재무팀 = lognorm(s=mu_sigma, scale=np.exp(np.log(1_000_000))).rvs(샘플수)
+마케팅팀 = lognorm(s=mu_sigma, scale=np.exp(np.log(2_000_000))).rvs(샘플수)
+영업팀 = lognorm(s=mu_sigma, scale=np.exp(np.log(3_000_000))).rvs(샘플수)
+def 법정한도계산(매출액):    
+    if 매출액<=10000000000:
+        return 매출액*0.003
+    elif 매출액<=50000000000:
+        초과금액=매출액-10000000000
+        return 20000000+초과금액*0.002
+    else:
+        초과금액=매출액-50000000000
+        return 60000000+초과금액*0.0003       
+def f(x):
+    재무팀비용=재무팀*(x[0]/1000000)
+    마케팅팀비용=마케팅팀*(x[1]/2000000)
+    영업팀비용=영업팀*(x[2]/3000000)
+    총접대비=재무팀비용+마케팅팀비용+영업팀비용
+    법정한도=법정한도계산(매출액)    
+    패널티=0
+    if 총접대비>9000000:    
+        패널티=(총접대비-9000000)*1000000
+    결과변수=총접대비-법정한도+패널티
+    return np.mean(결과변수)
+varbound=np.array([[0,5000000],[0,5000000],[0,5000000]])
+model=ga(function=f, dimension=3, variable_type='int', variable_boundaries=varbound)    
+model.run()
