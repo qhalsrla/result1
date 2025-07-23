@@ -1,6 +1,5 @@
 import numpy as np
-import mcerp
-from mcerp import *
+import numpy as np
 from scipy.stats import lognorm
 from geneticalgorithm import geneticalgorithm as ga
 import matplotlib.pyplot as plt
@@ -29,10 +28,12 @@ def f(x):
     총접대비=재무팀비용+마케팅팀비용+영업팀비용
     법정한도=법정한도계산(매출액)    
     패널티=0
-    if 총접대비>9000000:    
-        패널티=(총접대비-9000000)*1000000
-    결과변수=총접대비-법정한도+패널티
-    return np.mean(결과변수)
+    접대비합계=np.mean(총접대비)
+    if 접대비합계>9000000:    
+        패널티=(접대비합계-9000000)*1000
+    결과변수=접대비합계-법정한도+패널티
+    return 결과변수
 varbound=np.array([[0,5000000],[0,5000000],[0,5000000]])
 model=ga(function=f, dimension=3, variable_type='int', variable_boundaries=varbound)    
 model.run()
+
