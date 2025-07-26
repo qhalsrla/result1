@@ -1,4 +1,4 @@
-# 전표데이터의 p-value 검증
+# 전표데이터의 거래처별 이상치 추출과 오전/오후 입력시간대빈도 추출
 import re
 from scipy.stats import chi2_contingency
 import pandas as pd
@@ -27,6 +27,7 @@ df_이상치=거래처별월별매출[거래처별월별매출['증감률']>=1]
 빈도표=pd.crosstab(거래처별월별매출['증감률_100프로이상'],거래처별월별매출['입력시간대'])
 print(빈도표)
 
+# p-value 검증
 chi2, p, dof,expected = chi2_contingency(빈도표)
 print(f"chi2 통계량: {chi2: .3f}")
 print(f"p-value: {p:.3f}")
