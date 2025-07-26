@@ -1,4 +1,4 @@
-# 테이블 간 매핑, 누락 데이터 도출
+# 테이블 간 매핑과 누락 데이터 도출
 import pandas as pd
 df1_1=pd.read_csv('분개장_2.csv')
 df2_2=pd.read_csv('대량분개장_1.csv')
