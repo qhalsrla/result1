@@ -14,3 +14,10 @@
 * 시사점:
   <img width="786" height="685" alt="접대비 한도초과액" src="https://github.com/user-attachments/assets/9287f6d4-d440-4448-9226-ed3eeee7f174" />
 
+
+
+# 3) 전표데이터의 p-value 검증
+> ### 지금까지 배운지식을 총망라해 전표데이터의 이상치에 대한 p-value 빈도분석을 수행해보았습니다.
+* 문제정의:
+* 결과해석:
+* 시사점:
