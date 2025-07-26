@@ -1,4 +1,4 @@
-#테이블 간 매핑, 누락 데이터 도출
+# 테이블 간 매핑, 누락 데이터 도출
 import pandas as pd
 df1_1=pd.read_csv('분개장_2.csv')
 df2_2=pd.read_csv('대량분개장_1.csv')
@@ -10,7 +10,7 @@ key=['계정코드']
 누락계약.to_csv('누락계약_결과보고서.csv', index=False)
 print("누락계약건수:", len(누락계약))
 
-#월별 계약 건수 추이 시각화
+# 월별 계약 건수 추이 시각화
 import pandas as pd
 import matplotlib.pyplot as plt
 df=pd.read_csv('대량분개장_1.csv')
