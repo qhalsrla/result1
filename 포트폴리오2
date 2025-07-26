@@ -1,3 +1,4 @@
+# 세부담 최소화하는 접대비 최적화 모델
 import numpy as np
 import mcerp
 from mcerp import *
@@ -33,6 +34,7 @@ varbound=np.array([[0,15],[0,15],[0,15]])
 model=ga(function=f, dimension=3, variable_type='int', variable_boundaries=varbound)    
 model.run()
 
+# 히스토그램-접대비 한도초과액 시각화 
 입력변수=np.where(매출액_1>5000,110+(매출액_1-50000)*0.0003, np.where(매출액_1>10000,30+(매출액_1-10000)*0.002, 매출액_1*0.003))
 A팀비용,B팀비용,C팀비용=3,5,2
 결과변수=A팀비용+B팀비용+C팀비용-입력변수
