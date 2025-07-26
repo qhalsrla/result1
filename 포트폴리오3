@@ -1,0 +1,35 @@
+import re
+from scipy.stats import chi2_contingency
+import pandas as pd
+df=pd.read_excel('1.전표데이터.xlsx')
+df['일자']=pd.to_datetime(df['일자'],format='%Y%m%d')
+df['월']=df['일자'].dt.to_period('m')
+def 오전오후추출(text):
+    match=re.search(r'(오전|오후)', text)
+    if match:
+        return match.group(1)
+    else:
+        return None
+df['입력시간대']=df['MODIFY_DT'].astype(str).apply(오전오후추출)        
+df_상품매출=df[df['계정과목']=='상품매출']
+거래처별월별매출=df_상품매출.groupby(['거래처코드','월'])['대변'].sum().reset_index()
+거래처별월별매출=거래처별월별매출.sort_values(by=['거래처코드','월'])
+거래처별월별매출['전월매출']=거래처별월별매출['대변'].shift(1)
+거래처별월별매출['증감률']=((거래처별월별매출['대변']-거래처별월별매출['전월매출'])/거래처별월별매출['전월매출'])
+df_이상치=거래처별월별매출[거래처별월별매출['증감률']>=1]
+거래처별월별매출['증감률_100프로이상']=거래처별월별매출['증감률']>=1
+
+입력시간대빈도=df.groupby(['거래처코드','월','입력시간대']).size().reset_index(name='count')
+최빈입력시간대=입력시간대빈도.loc[입력시간대빈도.groupby(['거래처코드','월'])['count'].idxmax()]
+거래처별월별매출=거래처별월별매출.merge(최빈입력시간대[['거래처코드','월','입력시간대']], on=['거래처코드','월'], how='left')
+
+빈도표=pd.crosstab(거래처별월별매출['증감률_100프로이상'],거래처별월별매출['입력시간대'])
+print(빈도표)
+
+chi2, p, dof,expected = chi2_contingency(빈도표)
+print(f"chi2 통계량: {chi2: .3f}")
+print(f"p-value: {p:.3f}")
+if p < 0.05:
+    pirnt("월별 증감률이상치와 입력시간대 간에 통계적으로 유의미한 연관성이 있습니다.")
+else:
+    print("월별 증감률이상치와 입력시간대 간에 통계적으로 유의미한 연관성이 없습니다.")
